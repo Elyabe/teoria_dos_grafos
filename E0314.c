@@ -52,7 +52,7 @@ Vertice *novoVertice( int x )
 	return novo;
 }
 
-// Exibe a matriz de adjacência na tela 
+// Exibe a lista de adjacência na tela 
 // G : Grafo a ser impresso
 void exibirGrafo( Grafo *G )
 {
