@@ -136,8 +136,8 @@ void E0312_main(void)
 	}
 
 	imprimirGrafo( G );
-	cout<< "São vertices adjacentes? " << vertivesAdjacentes(G, 0, 1)<<endl;
-	cout<< "Grau do vertice: " << grauVertice(G, 0)<<endl;
-	cout<< "Exibir vertices adjacentes: ";
+	printf(" (0,1) São vertices adjacentes? %d\n", vertivesAdjacentes(G, 0, 1) );
+	printf("Grau do vertice 0 : %d\n", grauVertice(G, 0) ) ;
+	printf("Exibir vertices adjacentes a 0: \n");
 	exibirVerticesAdjacentes(G, 0);
 }
