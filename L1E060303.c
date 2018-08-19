@@ -39,11 +39,11 @@ unsigned int f( int u,  int v,  int n )
 // v : Quantidade de vértices
 Grafo *criarGrafo( unsigned int v )
 {
-	Grafo *G = (Grafo*)calloc( sizeof(int), 1);
+	Grafo *G = (Grafo*)calloc( 1, sizeof(int) );
 	if ( G ) 
 	{
 		G -> V = v;
-		G -> adj = (int*)calloc( sizeof(int), N(v) );
+		G -> adj = (int*)calloc( N(v), sizeof(int) );
 	}
 	return G;
 }
