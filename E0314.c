@@ -31,7 +31,10 @@ Grafo *criarGrafo( int V )
 		G -> V = V;
 		G -> E = 0;
 		G -> adj = (Vertice*)calloc( V, sizeof(Vertice));
-		G -> adj[0].prox = NULL;
+		
+		int i;
+		for ( i = 0; i < V; i++ )
+			G -> adj[i].prox = NULL;
 	}
 	return G;
 }
