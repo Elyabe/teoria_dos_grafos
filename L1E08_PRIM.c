@@ -39,12 +39,12 @@ typedef struct prim
 
 
 
-Vertice *novoVertice( int x, int w );
+Vertice *novo_vertice( int x, int w );
 
 
 // Cria e retorna ponteiro para heap a partir de grafo
 // G : Ponteiro para grafo
-Heap* criarVetor ( Grafo *G )
+Heap* criar_vetor ( Grafo *G )
 {
 	int k = G -> V;
 	Heap *myHeap = (Heap*)calloc( 1, sizeof(Heap) );
@@ -66,7 +66,7 @@ Heap* criarVetor ( Grafo *G )
 // Realiza troca entre elementos no heap 
 // heap : Ponteiro para heap
 // j, k : Posições dos elementos a serem trocadas 
-void swap( Vertice** heap, int j, int k )
+void trocar( Vertice** heap, int j, int k )
 {
 	Vertice *aux = heap[j];
 	heap[j] = heap[k], heap[k] = aux;
@@ -76,7 +76,7 @@ void swap( Vertice** heap, int j, int k )
 // myHeap : Ponteiro para heap
 // pos : Posição a descer 
 // T : Ponteiro para estrutura do PRIM - Acesso a vetor de estimativas
-void up ( Heap** myHeap, int pos, PRIM *T )
+void subir( Heap** myHeap, int pos, PRIM *T )
 {
 	int j = pos/2;
 	Vertice **heap = (*myHeap) -> vetVertices;
@@ -84,8 +84,8 @@ void up ( Heap** myHeap, int pos, PRIM *T )
 	{
 		if ( T[heap[pos] -> no].d < T[heap[j] -> no].d )
 		{
-			swap( heap, pos, j );
-			up( myHeap, j, T );
+			trocar( heap, pos, j );
+			subir( myHeap, j, T );
 		}
 	}
 }
@@ -94,7 +94,7 @@ void up ( Heap** myHeap, int pos, PRIM *T )
 // myHeap : Ponteiro para heap
 // pos : Posição do elemento a descer
 // T : Ponteiro para estrutura com estimativa
-void down ( Heap** myHeap, int pos, PRIM *T )
+void descer( Heap** myHeap, int pos, PRIM *T )
 {
 	int j = 2*pos;
 	Vertice **heap = (*myHeap) -> vetVertices;
@@ -103,8 +103,8 @@ void down ( Heap** myHeap, int pos, PRIM *T )
 		if ( ( j+1 <= (*myHeap)->size ) && T[heap[j+1] -> no].d < T[heap[j] -> no].d  ) j++;
 		if ( T[heap[pos] -> no].d > T[heap[j] -> no].d )
 		{
-			swap( heap, pos, j );
-			down ( myHeap, j, T );
+			trocar( heap, pos, j );
+			descer ( myHeap, j, T );
 		}
 	}
 }
@@ -112,22 +112,22 @@ void down ( Heap** myHeap, int pos, PRIM *T )
 // Criar heap usando a função descer
 // myHeap : Ponteiro para heap
 // T : Ponteiro para estrutura com estimativa
-void criarHeap ( Heap** myHeap, PRIM *T )
+void criar_heap( Heap** myHeap, PRIM *T )
 {
 	int j;
 	( (*myHeap) -> vetVertices )[ 0 ] = NULL;
 	for ( j = ((*myHeap) -> size - 1)/2; j > 0; j-- ) 
 	{
-		down( myHeap, j, T );
+		descer( myHeap, j, T );
 	}
 }
 
-void criarHeap2 ( Heap** myHeap, PRIM *T )
+void criar_heap_v2( Heap** myHeap, PRIM *T )
 {
 	int j;
 	for ( j = 1; j <= (*myHeap) -> size ; j++ )
 	{
-		up ( myHeap, j, T );
+		subir ( myHeap, j, T );
 	}
 }
 
@@ -135,26 +135,26 @@ void criarHeap2 ( Heap** myHeap, PRIM *T )
 // myHeap : Ponteiro de ponteiro para heap
 // v : Vértice a ser inserido
 // T : Estrutura com estimativas
-void inserirNovoVerticeH ( Heap** myHeap, Vertice* v, PRIM *T )
+void inserir_vert_heap( Heap** myHeap, Vertice* v, PRIM *T )
 {
 	( (*myHeap) -> vetVertices )[ ++(*myHeap)->size ] = v ;
-	up ( myHeap, (*myHeap) -> size, T );
+	subir ( myHeap, (*myHeap) -> size, T );
 }
 
 // Cria um Heap a partir de um grafo
 // myHeap : Ponteiro de ponteiro para heap a ser criado
 // G : Ponteiro para o grafo
 // T : Estrutura com estimativas de distância
-void gerarHeapGrafo( Grafo *G, Heap **myHeap, PRIM *T )
+void gerar_heap_grafo( Grafo *G, Heap **myHeap, PRIM *T )
 {
 	for ( int i = 0; i < G -> V; i++ )
-		inserirNovoVerticeH( myHeap, novoVertice( i, 0 ) , T );
+		inserir_vert_heap( myHeap, novo_vertice( i, 0 ) , T );
 }
 
 // Exibe vetor heap na tela com Rótulo e estimativa
 // myHeap : Ponteiro de ponteiro para heap
 // T : Estrutura com estimativas
-void exibirHeap ( Heap* myHeap, PRIM *T )
+void exibir_heap ( Heap* myHeap, PRIM *T )
 {
 	int cont;
 	for ( cont = 1; cont <= myHeap -> size; cont++ )
@@ -165,17 +165,17 @@ void exibirHeap ( Heap* myHeap, PRIM *T )
 // Remove e retorna do Heap de vértices de estimativas 
 // myHeap : Ponteiro de ponteiro para heap
 // T : Estrutura com estimativas
-Vertice* removeMinHeap ( Heap** myHeap, PRIM *T )
+Vertice* remover_min_heap ( Heap** myHeap, PRIM *T )
 {
 	Vertice *rt = NULL;
 	if ( (*myHeap) -> size > 0)
 		{ 
-			swap( (*myHeap) -> vetVertices, 1, (*myHeap) -> size );
+			trocar( (*myHeap) -> vetVertices, 1, (*myHeap) -> size );
 			rt = ( (*myHeap) -> vetVertices )[ (*myHeap) -> size-- ];
 			
 			//Reorganiza o  heap caso seja necessário
 			if ( (*myHeap) -> size > 1 )
-				down ( myHeap, 1, T );
+				descer ( myHeap, 1, T );
 		}
 	return rt;
 }
@@ -183,7 +183,7 @@ Vertice* removeMinHeap ( Heap** myHeap, PRIM *T )
 
 // Cria e retorna ponteiro para um grafo com V vértices
 // V : Ordem do grafo
-Grafo *criarGrafo( int V )
+Grafo *criar_grafo( int V )
 {
 	Grafo *G = (Grafo*)malloc(sizeof(Grafo));
 	if ( G != NULL )
@@ -199,7 +199,7 @@ Grafo *criarGrafo( int V )
 // Aloca e retorna ponteiro para novo vértice 
 // x : Rótulo do vértice
 // w : Peso da aresta associada
-Vertice *novoVertice( int x, int w )
+Vertice *novo_vertice( int x, int w )
 {
 	Vertice *novo = (Vertice*)malloc(sizeof(Vertice));
 	if ( novo != NULL )
@@ -216,7 +216,7 @@ Vertice *novoVertice( int x, int w )
 
 // Exibe o grafo na tela
 // G : Ponteiro para o grafo
-void exibirGrafo( Grafo *G )
+void exibir_grafo( Grafo *G )
 {
 	int v;
 	Vertice *p;
@@ -238,7 +238,7 @@ void exibirGrafo( Grafo *G )
 // G : Ponteiro para grafo
 // v, w : Extremidades da aresta
 // peso : Peso associado
-Grafo *inserirAresta( Grafo *G, int v, int w, int peso )
+Grafo *inserir_aresta( Grafo *G, int v, int w, int peso )
 {
 	if ( v != w )
 	{
@@ -252,13 +252,13 @@ Grafo *inserirAresta( Grafo *G, int v, int w, int peso )
 		if ( p == NULL )
 		{
 			//Inserção na lista de v			
-			Vertice *novo = novoVertice(w, peso);
+			Vertice *novo = novo_vertice(w, peso);
 			novo -> prox = G -> adj[v].prox;
 			G -> adj[v].prox = novo;
 			
 		
 			//Inserção na lista do w
-			novo = novoVertice(v,peso);
+			novo = novo_vertice(v,peso);
 			novo -> prox = G -> adj[w].prox;
 			G -> adj[w].prox = novo;
 
@@ -273,7 +273,7 @@ Grafo *inserirAresta( Grafo *G, int v, int w, int peso )
 // Remove aresta no grafo considerando a simetria
 // G : Ponteiro para grafo
 // v, w : Extremidades da aresta
-Grafo *removerAresta( Grafo *G, int v, int w )
+Grafo *remover_aresta( Grafo *G, int v, int w )
 {
 	Vertice *aux, *preaux;
 	
@@ -327,7 +327,7 @@ Grafo *removerAresta( Grafo *G, int v, int w )
 // Exibe na tela um vetor de inteiros na tela
 // v : Ponteiro para vetor
 // tam : Quantidade de elementos do vetor
-void exibirVetor( unsigned int *v, int tam)
+void exibir_vetor( unsigned int *v, int tam)
 {
   for ( int j = 0; j < tam; j++ )
 	printf("%d ", v[j] );
@@ -338,20 +338,20 @@ void exibirVetor( unsigned int *v, int tam)
 // Preenche o Grafo a partir de entradas
 // G : Ponteiro para o grafo
 // E : Quantidade de arestas
-Grafo *preencherGrafo( Grafo *G, int E )
+Grafo *preencher_grafo( Grafo *G, int E )
 {
 	int v, w, peso;
 	while ( E--)
 	{
 		scanf("%d%d%d", &v, &w, &peso );
-		G = inserirAresta(G, v, w, peso);
+		G = inserir_aresta(G, v, w, peso);
 	}
 	return G;
 }
 
-// Aloca e retorna ponteiro para estrutura de estimativas e predecessores
+// Aloca, inicializa e retorna ponteiro para estrutura de estimativas e predecessores
 // G : Ponteiro para o grafo G
-PRIM* alocarPrim( Grafo *G )
+PRIM* alocar_TAD_PRIM( Grafo *G )
 {
 	int i;
 	PRIM *novo = (PRIM*)malloc(sizeof(PRIM)*(G -> V) );
@@ -387,7 +387,7 @@ void showPrim( PRIM *T, int k )
 // Retorna 0, se não pertence e x > 0 se pertence, sendo x a posicao deste no heap
 // Q : Ponteiro para o heap
 // v : Vértice a ser analisado
-int pertenceQ( Heap *Q, Vertice *v )
+int pertence_Q( Heap *Q, Vertice *v )
 {
 	int i, pertence = 0;
 	Vertice *p;
@@ -404,28 +404,28 @@ int pertenceQ( Heap *Q, Vertice *v )
 // Criar arvore geradora e retorna estrutura com as informações
 // G : Ponteiro para o grafo analisado
 // r : Vértice inicial da árvore
-PRIM* primAlgoritmo( Grafo *G, int r )
+PRIM* prim_algoritmo( Grafo *G, int r )
 {
-	PRIM *T = alocarPrim( G );
+	PRIM *T = alocar_TAD_PRIM( G );
 	// showPrim( T, G->V );
 
 	T[r].d = 0;
 	// showPrim( T, G->V );
 	
-	Heap *Q = criarVetor(G);
-	gerarHeapGrafo(  G, &Q, T );
-	// exibirHeap(Q, T );
+	Heap *Q = criar_vetor(G);
+	gerar_heap_grafo(  G, &Q, T );
+	// exibir_heap(Q, T );
 
 	int vertAtualizado;
 	Vertice *u, *v;
 
 	while ( Q -> size )
 	{
-		u = removeMinHeap(&Q, T);
-		// exibirHeap(Q);0
+		u = remover_min_heap(&Q, T);
+		// exibir_heap(Q);0
 		for ( v = G -> adj[u -> no].prox; v != NULL; v = v -> prox )
 		{
-			vertAtualizado = pertenceQ(Q,v);
+			vertAtualizado = pertence_Q(Q,v);
 			if ( vertAtualizado && v -> peso < T[v -> no].d )
 			{
 				T[ v -> no].predecessor = u;
@@ -433,9 +433,9 @@ PRIM* primAlgoritmo( Grafo *G, int r )
 				
 				// Reorganiza o Heap
 				if ( vertAtualizado <= Q -> size )
-					up ( &Q, vertAtualizado, T );
+					subir ( &Q, vertAtualizado, T );
 
-				// exibirHeap( Q, T);
+				// exibir_heap( Q, T);
 			}
 		}
 
@@ -452,11 +452,11 @@ void L1E08_PRIM_main(void)
 
 
 	scanf("%d%d", &V, &E);
-	G = criarGrafo(V);
-	G = preencherGrafo(G, E);
-	exibirGrafo( G );
+	G = criar_grafo(V);
+	G = preencher_grafo(G, E);
+	exibir_grafo( G );
 
 	scanf("%d", &initPRIM );
-	PRIM *T_min = primAlgoritmo( G, initPRIM);
+	PRIM *T_min = prim_algoritmo( G, initPRIM);
 	showPrim( T_min, G -> V );
 }
