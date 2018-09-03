@@ -53,11 +53,11 @@ Heap* criar_vetor ( Grafo *G )
 	{
 		myHeap -> space = k;
 		// myHeap -> vetVertices = (Vertice**)calloc( k*(k-1) + 1, sizeof( Vertice* ) );
-		myHeap -> vetVertices = (Vertice**)calloc( k, sizeof( Vertice* ) );
+		myHeap -> vetVertices = (Vertice**)calloc( k+1, sizeof( Vertice* ) );
 
 		// Inicializa vetor de ponteiros
-		while ( k-- >= 0 )
-			myHeap -> vetVertices[k] = NULL;
+		while ( k >= 0 )
+			myHeap -> vetVertices[k--] = NULL;
 	}
 
 	return myHeap;
