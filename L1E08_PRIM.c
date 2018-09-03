@@ -323,6 +323,23 @@ Grafo *remover_aresta( Grafo *G, int v, int w )
 	return G;
 }
 
+// Libera memória ocupada pela fila de vértices
+// G : Ponteiro para grafo formado pela fila
+Grafo* desalocar_fila( Grafo *G )
+{
+	Vertice *aux;
+	while ( G -> adj )
+	{
+		aux = G -> adj;
+		G -> adj = aux -> prox;
+		free( aux );
+	}
+
+	free( G );
+	G = NULL;
+	return G;
+}
+
 
 // Exibe na tela um vetor de inteiros na tela
 // v : Ponteiro para vetor
@@ -366,10 +383,23 @@ PRIM* alocar_TAD_PRIM( Grafo *G )
 	return novo;
 }
 
+// Libera memória ocupada pelo TAD
+// T : Ponteiro para estrutura 
+PRIM* desalocar_TAD_PRIM( PRIM* T )
+{
+	free( T -> predecessor 	);
+	free( T );
+
+	T = NULL;
+
+	return T;
+}
+
+
 // Exibe na tela o vetor de estimativas e predecessores
 // T : Ponteiro para estrutura a ser exibida
 // k : Quantidade de vértices da estrutura
-void showPrim( PRIM *T, int k )
+void exibir_PRIM( PRIM *T, int k )
 {
 	int i;
 	printf("\n");
@@ -407,10 +437,10 @@ int pertence_Q( Heap *Q, Vertice *v )
 PRIM* prim_algoritmo( Grafo *G, int r )
 {
 	PRIM *T = alocar_TAD_PRIM( G );
-	// showPrim( T, G->V );
+	// exibir_PRIM( T, G->V );
 
 	T[r].d = 0;
-	// showPrim( T, G->V );
+	// exibir_PRIM( T, G->V );
 	
 	Heap *Q = criar_vetor(G);
 	gerar_heap_grafo(  G, &Q, T );
@@ -432,9 +462,7 @@ PRIM* prim_algoritmo( Grafo *G, int r )
 				T[ v -> no].d = v -> peso;
 				
 				// Reorganiza o Heap
-				if ( vertAtualizado <= Q -> size )
-					subir ( &Q, vertAtualizado, T );
-
+				subir ( &Q, vertAtualizado, T );
 				// exibir_heap( Q, T);
 			}
 		}
@@ -458,5 +486,9 @@ void L1E08_PRIM_main(void)
 
 	scanf("%d", &initPRIM );
 	PRIM *T_min = prim_algoritmo( G, initPRIM);
-	showPrim( T_min, G -> V );
+	exibir_PRIM( T_min, G -> V );
+	
+	T_min = desalocar_TAD_PRIM( T_min );
+	G = desalocar_fila( G );
+
 }
