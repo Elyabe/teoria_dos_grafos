@@ -297,14 +297,18 @@ void L1E08_KRUSKAL_main(void)
 
 	scanf("%d%d", &V, &E );
 	G = criar_grafo( V );
+
 	while ( E-- )
 	{
 		scanf("%d%d%d", &u, &v, &peso );
 		G -> A = inserir_aresta( G -> A, u, v, peso );
 	}
+
 	printf("\n\nFila de arestas:\n\n");
 	exibir_fila( G -> A );
 	G = Kruskal( G );
 	printf("\nArvore Geradora min\n\n");
 	exibir_fila( G -> A );
+
+	G = desalocar_grafo( G );
 }
