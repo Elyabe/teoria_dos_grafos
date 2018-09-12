@@ -72,7 +72,7 @@ Grafo* desalocar_grafo( Grafo *G )
 // peso : Peso da aresta
 Aresta *nova_aresta( int u, int v, int peso )
 {
-	Aresta *nova = (Aresta*)calloc(sizeof(Aresta),1);
+	Aresta *nova = (Aresta*)calloc(1,sizeof(Aresta));
 	if ( nova ) 
 	{ 
 		nova -> u = u;
