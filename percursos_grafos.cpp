@@ -275,7 +275,7 @@ Grafo *preencher_grafo( Grafo *G, int E )
 
 
 // Cria e retorna uma fila vazia
-Fila *criarFila(void)
+Fila *criar_fila(void)
 {
 	Fila *nova = (Fila*)calloc(1,sizeof(Fila));
 	if ( nova ) 
@@ -379,7 +379,7 @@ void percurso_largura( Grafo *G, Fila **E_tree, unsigned int *Alc, int r )
 
 	fila_vert = inserir_inicio( fila_vert, r, 0 );
 	Alc[r] = alc = 1;
-	*E_tree = criarFila();
+	*E_tree = criar_fila();
 
 	while ( fila_vert )
 	{
@@ -492,7 +492,7 @@ void percurso_profundidade_main(void)
 	alc = exp = 0;
 	Alc = (unsigned int*)calloc( G -> V, sizeof(unsigned int) );
 	Exp = (unsigned int*)calloc( G -> V, sizeof(unsigned int) );
-	Fila *E_tree = criarFila();
+	Fila *E_tree = criar_fila();
 	
 	// Cria vértice raiz do percurso 
 	percurso_profundidade( G, alocar_vertice( rPercurso, 0 ) , NULL, &E_tree, &Alc, &Exp, &alc, &exp );
