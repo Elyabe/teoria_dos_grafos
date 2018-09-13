@@ -31,8 +31,8 @@ int main( int argc, char *args[] )
 	// E0314_main();
 	
 	// PERCURSO_GRAFOS
-		// percursoLargura_main();
-		percursoProfundidade_main();
+		percurso_largura_main();
+		// percurso_profundidade_main();
 	// ford_fulkerson_main();
 	// alocacao_maquinas_main();
 	return 0;
